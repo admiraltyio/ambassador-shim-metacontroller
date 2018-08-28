@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ambassador-shim-metacontroller
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: mappings.ambassadorshim.admiralty.io
+spec:
+  group: ambassadorshim.admiralty.io
+  names:
+    kind: Mapping
+    plural: mappings
+    singular: mapping
+  version: v1alpha1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ambassador-mapping-controller
+  namespace: ambassador-shim-metacontroller
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: ambassador-mapping-controller
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ambassador-mapping-controller
+  namespace: ambassador-shim-metacontroller
+spec:
+  selector:
+    matchLabels:
+      app: ambassador-mapping-controller
+  template:
+    metadata:
+      labels:
+        app: ambassador-mapping-controller
+    spec:
+      containers:
+      - image: quay.io/admiralty/ambassador-mapping-controller
+        name: controller
+---
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: CompositeController
+metadata:
+  name: ambassador-mapping-controller
+  namespace: ambassador-shim-metacontroller
+spec:
+  childResources:
+  - apiVersion: v1
+    resource: services
+    updateStrategy:
+      method: InPlace
+  generateSelector: true
+  hooks:
+    sync:
+      webhook:
+        url: http://ambassador-mapping-controller.ambassador-shim-metacontroller/sync
+  parentResource:
+    apiVersion: ambassadorshim.admiralty.io/v1alpha1
+    resource: mappings
+  resyncPeriodSeconds: 10

@@ -1,0 +1,8 @@
+resources:
+- namespace.yaml
+- ../mapping/crd.yaml
+- ../mapping/controller.yaml
+- ../mapping/webhook.yaml
+namespace: ambassador-shim-metacontroller
+patches:
+- namespaced_url_patch.yaml

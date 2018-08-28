@@ -1,0 +1,26 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ambassador-mapping-controller
+spec:
+  selector:
+    matchLabels:
+      app: ambassador-mapping-controller
+  template:
+    metadata:
+      labels:
+        app: ambassador-mapping-controller
+    spec:
+      containers:
+      - name: controller
+        image: quay.io/admiralty/ambassador-mapping-controller
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ambassador-mapping-controller
+spec:
+  selector:
+    app: ambassador-mapping-controller
+  ports:
+  - port: 80

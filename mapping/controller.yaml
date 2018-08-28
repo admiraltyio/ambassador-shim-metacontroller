@@ -1,0 +1,19 @@
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: CompositeController
+metadata:
+  name: ambassador-mapping-controller
+spec:
+  generateSelector: true
+  parentResource:
+    apiVersion: ambassadorshim.admiralty.io/v1alpha1
+    resource: mappings
+  childResources:
+  - apiVersion: v1
+    resource: services
+    updateStrategy:
+      method: InPlace
+  hooks:
+    sync:
+      webhook:
+        url: http://ambassador-mapping-controller/sync
+  resyncPeriodSeconds: 10

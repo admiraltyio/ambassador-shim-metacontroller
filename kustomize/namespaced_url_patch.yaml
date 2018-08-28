@@ -1,0 +1,9 @@
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: CompositeController
+metadata:
+  name: ambassador-mapping-controller
+spec:
+  hooks:
+    sync:
+      webhook:
+        url: http://ambassador-mapping-controller.ambassador-shim-metacontroller/sync
