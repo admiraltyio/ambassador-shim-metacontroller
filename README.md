@@ -33,7 +33,7 @@ Source code of the Metacontroller experiment described on the Admiralty blog: [K
 
 ## Next Steps
 
-This shim is a proof of concept that only supports the most basic feature of Ambassador: mapping a prefix to a Service. This shim could be expanded (full Mapping Spec and Status, other CRDs, etc.) into a fully-featured side-car of Ambassador. The advantage of this version
+This shim is a proof of concept that only supports the most basic feature of Ambassador: mapping a prefix to a Service. This shim could be expanded (full Mapping Spec and Status, other CRDs, etc.) into a fully-featured side-car of Ambassador. The advantage of this version is that it is written in Python, the language of the core Ambassador project.
 
 ## See Also
 
